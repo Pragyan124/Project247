@@ -20,20 +20,18 @@ pipeline{
             }
         }
 
-        stage ('SonarQube Scan') {
+        stage('SonarQube Scan') {
             steps {
-                withSonarQubeEnv("${SONARQUBE_SERVER}") {
-                    sh """
-                    sonar-scanner \
-                      -Dsonar.projectKey=Pragyan124_Project247
-                      -Dsonar.organization=pragyan124
-                      -Dsonar.sources=. \
-                      -Dsonar.host.url=https.//sonarcloud.io \
-                      -Dsonar.login=$SONAR_AUTH_TOKEN
-                    """
-                }
+                withSonarQubeEnv('SonarCloud') {
+                sh """
+                sonar-scanner \
+                  -Dsonar.projectKey=Pragyan124_Project247 \
+                  -Dsonar.organization=pragyan124 \
+                  -Dsonar.sources=.
+                """
             }
         }
+    }
 
         stage ('Build Docker Images') {
             steps {
