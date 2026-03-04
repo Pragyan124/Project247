@@ -42,7 +42,12 @@ pipeline {
 
         stage('Build Docker Images') {
             steps {
-                sh "docker-compose build"
+               sh """
+               # Download the standalone compose binary if it doesn't exist
+               curl -SL https://github.com/docker/compose/releases/download/v2.24.5/docker-compose-linux-x86_64 -o docker-compose
+               chmod +x docker-compose
+               ./docker-compose build
+               """
             }
         }
 
