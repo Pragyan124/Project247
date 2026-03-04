@@ -8,6 +8,10 @@ pipeline{
         DOCKER_IMAGE_FRONTEND = 'pragyanborthakur/devops-frontend:1.0'
     }
 
+    tools {
+        sonarRunner 'SonarScanner'
+    }
+
     stages {
         stage('Checkout') {
             steps {
