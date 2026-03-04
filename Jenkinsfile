@@ -4,9 +4,10 @@ pipeline {
     environment {
         SONARQUBE_SERVER = 'SonarCloud'
         // This must match the name in Manage Jenkins -> Global Tool Configuration
-        SONAR_SCANNER_NAME = 'SonarScanner' 
-        DOCKER_IMAGE_BACKEND = 'pragyanborthakur/devops-server:1.0'
-        DOCKER_IMAGE_FRONTEND = 'pragyanborthakur/devops-client:1.0'
+        SONAR_SCANNER_NAME = 'SonarScanner'
+        VERSION = "1.0.${env.BUILD_ID}"
+        DOCKER_IMAGE_BACKEND = 'pragyanborthakur/devops-server:${VERSION}'
+        DOCKER_IMAGE_FRONTEND = 'pragyanborthakur/devops-client:${VERSION}'
     }
 
     tools {
