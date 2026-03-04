@@ -63,15 +63,15 @@ pipeline {
                     usernameVariable: 'DOCKER_USER',
                     passwordVariable: 'DOCKER_PASS'
                 )]) {
-                    sh '''
+                    sh """
                         # Use single quotes (\'\'\') for the script to be secure
-                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                        echo "${DOCKER_PASS}" | docker login -u "${DOCKER_USER}" --password-stdin
                 
                         # Manually push the images since docker-compose isn't available
                         
                         docker push pragyanborthakur/devops-server:${VERSION}
                         docker push pragyanborthakur/devops-client:${VERSION}
-                    '''
+                    """
                 }
             }
         }
@@ -84,9 +84,9 @@ pipeline {
                     usernameVariable: 'DOCKER_USER',
                     passwordVariable: 'DOCKER_PASS'
                 )]) {
-                    sh '''
+                    sh """
                     # Securely login
-                    echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                    echo "${DOCKER_PASS}" | docker login -u "${DOCKER_USER}" --password-stdin
                     
                     # Push the images
                     docker push ${DOCKER_IMAGE_BACKEND}
@@ -94,7 +94,7 @@ pipeline {
                     
                     # Optional: Logout to clean up
                     docker logout
-                    '''
+                    """
                 }
             }
         }
