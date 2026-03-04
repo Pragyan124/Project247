@@ -1,0 +1,20 @@
+services:
+  server:
+    build: ./server
+    container_name: node_server
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./server/.env 
+    environment:
+      - NODE_ENV=production
+    restart: always
+
+  client:
+    build: ./client
+    container_name: client
+    ports:
+      - "3000:3000"
+    depends_on:
+      - server
+    restart: always
