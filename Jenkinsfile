@@ -1,9 +1,10 @@
-pipeline{
+pipeline {
     agent any 
 
     environment {
         SONARQUBE_SERVER = 'SonarCloud'
-        SONAR_SCANNER = 'SonarScanner'
+        // This must match the name in Manage Jenkins -> Global Tool Configuration
+        SONAR_SCANNER_NAME = 'SonarScanner' 
         DOCKER_IMAGE_BACKEND = 'pragyanborthakur/devops-server:1.0'
         DOCKER_IMAGE_FRONTEND = 'pragyanborthakur/devops-frontend:1.0'
     }
@@ -22,22 +23,26 @@ pipeline{
 
         stage('SonarQube Scan') {
             steps {
-                withSonarQubeEnv('SonarCloud') {
-                sh """
-                sonar-scanner \
-                  -Dsonar.projectKey=Pragyan124_Project247 \
-                  -Dsonar.organization=pragyan124 \
-                  -Dsonar.sources=.
-                """
+                script {
+                    // This finds the installation path and adds /bin to the command
+                    def scannerHome = tool 'SonarScanner'
+                    
+                    withSonarQubeEnv('SonarCloud') {
+                        sh """
+                        ${scannerHome}/bin/sonar-scanner \
+                          -Dsonar.projectKey=Pragyan124_Project247 \
+                          -Dsonar.organization=pragyan124 \
+                          -Dsonar.sources=. \
+                          -Dsonar.host.url=https://sonarcloud.io
+                        """
+                    }
+                }
             }
         }
-    }
 
-        stage ('Build Docker Images') {
+        stage('Build Docker Images') {
             steps {
-                sh """
-                docker-compose build
-                """
+                sh "docker-compose build"
             }
         }
 
@@ -55,14 +60,10 @@ pipeline{
                 }
             }
         }
-    }
+    } // End of Stages
 
     post {
-        success {
-            echo 'Pipeline completed successfully!'
-        }
-        failure {
-            echo 'Pipeline failed!'
-        }
+        success { echo 'Pipeline completed successfully!' }
+        failure { echo 'Pipeline failed!' }
     }
 }
