@@ -113,6 +113,40 @@ pipeline {
                 }
             }
         }
+
+        stage('Update Manifest Repo') {
+            steps {
+                script {
+            // 1. Define your Manifest Repo URL (use HTTPS)
+                def manifestRepo = "https://github.com/Pragyan124/Project247.git"
+            
+            // 2. Use credentials to clone and push
+                    withCredentials([usernamePassword(credentialsId: 'github-creds', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                
+                // Clone the repo into a temporary folder
+                    sh "git clone https://${GIT_USERNAME}:${GIT_PASSWORD}@${manifestRepo} temp-repo"
+                
+                    dir('temp-repo') {
+                    // 3. Use 'sed' to replace the old image tag with the new one
+                    // This looks for 'devops-server:ANYTHING' and replaces it with 'devops-server:NEW_TAG'
+                    sh """
+                    sed -i 's|devops-server:.*|devops-server:${BUILD_NUMBER}|g' k8s/backend.yaml
+                    sed -i 's|devops-client:.*|devops-client:${BUILD_NUMBER}|g' k8s/frontend.yaml
+                    """
+                    
+                    // 4. Commit and Push
+                    sh """
+                    git config user.email "jenkins@yourdomain.com"
+                    git config user.name "Jenkins Automation"
+                    git add .
+                    git commit -m "Update image tags to version ${BUILD_NUMBER} [skip ci]"
+                    git push origin main
+                    """
+                    }
+                }
+            }
+        }
+    }
     } // End of Stages
 
     post {
