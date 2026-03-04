@@ -71,6 +71,29 @@ pipeline {
                 }
             }
         }
+
+        stage('Push to Docker Hub') {
+            steps {
+                // Use the ID you created in Jenkins Credentials
+                withCredentials([usernamePassword(
+                    credentialsId: 'dockerhub-creds',
+                    usernameVariable: 'DOCKER_USER',
+                    passwordVariable: 'DOCKER_PASS'
+                )]) {
+                    sh '''
+                    # Securely login
+                    echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                    
+                    # Push the images
+                    docker push ${DOCKER_IMAGE_BACKEND}
+                    docker push ${DOCKER_IMAGE_BACKEND}
+                    
+                    # Optional: Logout to clean up
+                    docker logout
+                    '''
+                }
+            }
+        }
     } // End of Stages
 
     post {
