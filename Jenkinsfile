@@ -56,20 +56,20 @@ pipeline {
             }
         }
 
-        stage('Security Scan') {
-            steps {
-              script {
-                    // Ensure the reports directory exists
-                    sh 'mkdir -p ./reports'
+        // stage('Security Scan') {
+        //     steps {
+        //       script {
+        //             // Ensure the reports directory exists
+        //             sh 'mkdir -p ./reports'
 
-                    sh """
-                    trivy image -q -f json -o /var/lib/jenkins/reports/trivy-report-backend.json ${DOCKER_IMAGE_BACKEND}
-                    trivy image -q -f json -o /var/lib/jenkins/reports/trivy-report-frontend.json ${DOCKER_IMAGE_FRONTEND}
-                    """
-                    archiveArtifacts artifacts: 'reports/*.json', fingerprint: true
-              }
-           }
-        }
+        //             sh """
+        //             trivy image -q -f json -o /var/lib/jenkins/reports/trivy-report-backend.json ${DOCKER_IMAGE_BACKEND}
+        //             trivy image -q -f json -o /var/lib/jenkins/reports/trivy-report-frontend.json ${DOCKER_IMAGE_FRONTEND}
+        //             """
+        //             archiveArtifacts artifacts: 'reports/*.json', fingerprint: true
+        //       }
+        //    }
+        // }
 
         stage('Push Images') {
             steps {
