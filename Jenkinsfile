@@ -6,7 +6,7 @@ pipeline {
         // This must match the name in Manage Jenkins -> Global Tool Configuration
         SONAR_SCANNER_NAME = 'SonarScanner' 
         DOCKER_IMAGE_BACKEND = 'pragyanborthakur/devops-server:1.0'
-        DOCKER_IMAGE_FRONTEND = 'pragyanborthakur/devops-frontend:1.0'
+        DOCKER_IMAGE_FRONTEND = 'pragyanborthakur/devops-client:1.0'
     }
 
     tools {
@@ -64,7 +64,7 @@ pipeline {
                 
                         # Manually push the images since docker-compose isn't available
                         docker push pragyanborthakur/devops-server:1.0
-                        docker push pragyanborthakur/devops-frontend:1.0
+                        docker push pragyanborthakur/devops-client:1.0
                     '''
                 }
             }
