@@ -48,7 +48,11 @@ pipeline {
                curl -SL https://github.com/docker/compose/releases/download/v2.24.5/docker-compose-linux-x86_64 -o docker-compose
                chmod +x docker-compose
                ./docker-compose build
-               """
+               
+                # Use the variables to build so the names match exactly for the push
+                docker build -t ${DOCKER_IMAGE_BACKEND} ./server
+                docker build -t ${DOCKER_IMAGE_FRONTEND} ./client
+                """
             }
         }
 
