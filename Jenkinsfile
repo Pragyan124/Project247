@@ -63,8 +63,9 @@ pipeline {
                         echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
                 
                         # Manually push the images since docker-compose isn't available
-                        docker push pragyanborthakur/devops-server:1.0
-                        docker push pragyanborthakur/devops-client:1.0
+                        VERSION = "1.0.${env.BUILD_ID}"
+                        docker push pragyanborthakur/devops-server:${VERSION}
+                        docker push pragyanborthakur/devops-client:${VERSION}
                     '''
                 }
             }
