@@ -126,19 +126,18 @@ pipeline {
                 // Clone the repo into a temporary folder
                     sh "git clone https://${GIT_USERNAME}:${GIT_PASSWORD}@${manifestRepo} temp-repo"
                 
-                    dir('temp-repo') {
+                    dir('temp-repo/k8s/overlays/dev') {
                     // 3. Use 'sed' to replace the old image tag with the new one
                     // This looks for 'devops-server:ANYTHING' and replaces it with 'devops-server:NEW_TAG'
-                    sh """
-                    sed -i 's|devops-server:.*|devops-server:${BUILD_NUMBER}|g' k8s/backend.yaml
-                    sed -i 's|devops-client:.*|devops-client:${BUILD_NUMBER}|g' k8s/frontend.yaml
-                    """
+                    
+                    sh "sed -i 's|newTag:.*|newTag: ${BUILD_NUMBER}|g' kustomization.yaml"
+                    
                     
                     // 4. Commit and Push
                     sh """
                     git config user.email "jenkins@yourdomain.com"
                     git config user.name "Jenkins Automation"
-                    git add .
+                    git add kustomization.yaml
                     git commit -m "Update image tags to version ${BUILD_NUMBER} [skip ci]"
                     git push origin main
                     """
