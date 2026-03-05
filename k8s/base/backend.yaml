@@ -11,13 +11,25 @@ spec:
     metadata:
       labels:
         app: backend
+        annotations:
+        # Enable the injector
+        vault.hashicorp.com/agent-inject: "true"
+        # The role we created in Vault
+        vault.hashicorp.com/role: "todo-role"
+        # The path to the secret in Vault
+        vault.hashicorp.com/agent-inject-secret-database: "secret/data/mongodb"
+        # How to format the file inside the pod
+        vault.hashicorp.com/agent-inject-template-database: |
+          {{- with secret "secret/data/mongodb" -}}
+          export MONGO_PASSWORD="{{ .Data.data.password }}"
+          {{- end -}}
     spec:
       containers:
       - name: backend
         image: pragyanborthakur/devops-server:56
         env:
         - name: MONGO_URL
-          value: mongodb+srv://borthakurpragyan15_db_user:${process.env.MONGO_PASSWORD}@database.yzhfipq.mongodb.net/?appName=database
+          value: mongodb+srv://borthakurpragyan15_db_user@database.yzhfipq.mongodb.net/?appName=database
         ports:
         - containerPort: 5000
 ---

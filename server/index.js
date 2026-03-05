@@ -5,6 +5,19 @@ import "dotenv/config";
 
 const app = express();
 const MONGO_URI=`mongodb+srv://borthakurpragyan15_db_user:${process.env.MONGO_PASSWORD}@database.yzhfipq.mongodb.net/?appName=database`
+const fs = require('fs');
+const path = '/vault/secrets/database';
+
+// If Vault injected the file, read it and set it as an Environment Variable
+if (fs.existsSync(path)) {
+    const secretContent = fs.readFileSync(path, 'utf8');
+    // Assuming the file looks like: export MONGO_PASSWORD="your_pass"
+    const match = secretContent.match(/MONGO_PASSWORD="(.+)"/);
+    if (match) {
+        process.env.MONGO_PASSWORD = match[1];
+        console.log("Vault secret loaded successfully.");
+    }
+}
 
 app.use(cors());
 app.use(express.json());
