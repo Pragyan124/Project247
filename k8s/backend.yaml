@@ -14,7 +14,10 @@ spec:
     spec:
       containers:
       - name: backend
-        image: pragyanborthakur/devops-server:latest 
+        image: pragyanborthakur/devops-server:latest
+        env:
+        - name: MONGO_URL
+          value: mongodb+srv://borthakurpragyan15_db_user:${process.env.MONGO_PASSWORD}@database.yzhfipq.mongodb.net/?appName=database
         ports:
         - containerPort: 5000
 ---
