@@ -118,7 +118,7 @@ pipeline {
             steps {
                 script {
             // 1. Define your Manifest Repo URL (use HTTPS)
-                def manifestRepo = "https://github.com/Pragyan124/Project247.git"
+                def manifestRepo = "github.com/Pragyan124/Project247.git"
             
             // 2. Use credentials to clone and push
                     withCredentials([usernamePassword(credentialsId: 'github-creds', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
