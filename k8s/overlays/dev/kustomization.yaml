@@ -10,9 +10,9 @@ namePrefix: dev-
 # This is what Jenkins will update!
 images:
   - name: pragyanborthakur/devops-server
-    newTag: 1.0.57
+    newTag: 1.0.58
   - name: pragyanborthakur/devops-client
-    newTag: 1.0.57
+    newTag: 1.0.58
 
 # Add dev-specific labels
 commonLabels:
