@@ -11,5 +11,5 @@
 
 ## Terraform Module:
 
-![Link](https://github.com/Pragyan124/terraform-devops.git)
+Repository https://github.com/Pragyan124/terraform-devops.git
 
